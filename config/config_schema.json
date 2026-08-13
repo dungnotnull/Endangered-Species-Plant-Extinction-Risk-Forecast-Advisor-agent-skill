@@ -1,0 +1,371 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Endangered Species Advisor Configuration Schema",
+  "description": "JSON schema for the endangered species forecast advisor configuration file",
+  "type": "object",
+  "required": ["version", "environment", "skill", "system", "analysis", "disclaimers"],
+  "properties": {
+    "version": {
+      "type": "string",
+      "description": "Configuration version following semantic versioning"
+    },
+    "environment": {
+      "type": "string",
+      "enum": ["development", "staging", "production"],
+      "description": "Deployment environment"
+    },
+    "skill": {
+      "type": "object",
+      "required": ["name", "version", "description"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Skill identifier name"
+        },
+        "version": {
+          "type": "string",
+          "description": "Skill version"
+        },
+        "description": {
+          "type": "string",
+          "description": "Skill description for triggering and documentation"
+        },
+        "compatibility": {
+          "type": "object",
+          "properties": {
+            "requiredTools": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "List of required tools"
+            },
+            "optionalTools": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "List of optional tools"
+            },
+            "dependencies": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "string"
+              },
+              "description": "Dependency file paths"
+            }
+          }
+        }
+      }
+    },
+    "system": {
+      "type": "object",
+      "required": ["contextWindow", "performance", "errorHandling", "logging"],
+      "properties": {
+        "contextWindow": {
+          "type": "object",
+          "required": ["maxTokens", "warningThreshold", "strategy"],
+          "properties": {
+            "maxTokens": {
+              "type": "integer",
+              "minimum": 1,
+              "description": "Maximum context window size in tokens"
+            },
+            "warningThreshold": {
+              "type": "integer",
+              "minimum": 1,
+              "description": "Token count at which to issue a warning"
+            },
+            "strategy": {
+              "type": "string",
+              "enum": ["progressive_disclosure", "summarization", "compression"],
+              "description": "Strategy for managing context window limits"
+            }
+          }
+        },
+        "performance": {
+          "type": "object",
+          "properties": {
+            "caching": {
+              "type": "object",
+              "properties": {
+                "enabled": {
+                  "type": "boolean"
+                },
+                "ttl": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "description": "Time to live for cache entries in milliseconds"
+                },
+                "maxSize": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "description": "Maximum number of cache entries"
+                }
+              }
+            },
+            "parallelProcessing": {
+              "type": "object",
+              "properties": {
+                "enabled": {
+                  "type": "boolean"
+                },
+                "maxConcurrency": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "description": "Maximum number of parallel operations"
+                }
+              }
+            },
+            "monitoring": {
+              "type": "object",
+              "properties": {
+                "enabled": {
+                  "type": "boolean"
+                },
+                "metrics": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "exportInterval": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "description": "Metrics export interval in milliseconds"
+                }
+              }
+            }
+          }
+        },
+        "errorHandling": {
+          "type": "object",
+          "required": ["strategy", "errorLogging"],
+          "properties": {
+            "strategy": {
+              "type": "string",
+              "enum": ["graceful_fallback", "fail_fast", "retry_only"],
+              "description": "Error handling strategy"
+            },
+            "retryAttempts": {
+              "type": "integer",
+              "minimum": 0,
+              "description": "Number of retry attempts before failing"
+            },
+            "retryDelay": {
+              "type": "integer",
+              "minimum": 0,
+              "description": "Base retry delay in milliseconds"
+            },
+            "fallbackBehavior": {
+              "type": "string",
+              "enum": ["partial_results", "cached_results", "minimal_response"],
+              "description": "Fallback behavior when retries are exhausted"
+            },
+            "errorLogging": {
+              "type": "object",
+              "properties": {
+                "enabled": {
+                  "type": "boolean"
+                },
+                "level": {
+                  "type": "string",
+                  "enum": ["error", "warn", "info", "debug"]
+                },
+                "includeStackTrace": {
+                  "type": "boolean"
+                },
+                "includeContext": {
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        },
+        "logging": {
+          "type": "object",
+          "required": ["enabled", "level"],
+          "properties": {
+            "enabled": {
+              "type": "boolean"
+            },
+            "level": {
+              "type": "string",
+              "enum": ["error", "warn", "info", "debug"]
+            },
+            "format": {
+              "type": "string",
+              "enum": ["structured", "text"]
+            },
+            "outputs": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": ["console", "file", "external"]
+              }
+            },
+            "debug": {
+              "type": "boolean"
+            }
+          }
+        }
+      }
+    },
+    "analysis": {
+      "type": "object",
+      "required": ["frameworks", "defaultWorkflow"],
+      "properties": {
+        "frameworks": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "object",
+            "properties": {
+              "enabled": {
+                "type": "boolean"
+              },
+              "referencePath": {
+                "type": "string"
+              },
+              "version": {
+                "type": "string"
+              },
+              "parameters": {
+                "type": "object",
+                "additionalProperties": true
+              }
+            }
+          }
+        },
+        "defaultWorkflow": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Default analysis workflow specifying framework order"
+        }
+      }
+    },
+    "disclaimers": {
+      "type": "object",
+      "required": ["standing"],
+      "properties": {
+        "standing": {
+          "type": "object",
+          "properties": {
+            "enabled": {
+              "type": "boolean"
+            },
+            "text": {
+              "type": "string"
+            }
+          }
+        },
+        "formalAssessment": {
+          "type": "object",
+          "properties": {
+            "enabled": {
+              "type": "boolean"
+            },
+            "text": {
+              "type": "string"
+            }
+          }
+        },
+        "professionalReferral": {
+          "type": "object",
+          "properties": {
+            "enabled": {
+              "type": "boolean"
+            },
+            "text": {
+              "type": "string"
+            }
+          }
+        },
+        "dataQuality": {
+          "type": "object",
+          "properties": {
+            "enabled": {
+              "type": "boolean"
+            },
+            "text": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "integration": {
+      "type": "object",
+      "properties": {
+        "externalAPIs": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "object",
+            "properties": {
+              "enabled": {
+                "type": "boolean"
+              },
+              "endpoint": {
+                "type": "string",
+                "format": "uri"
+              },
+              "apiKey": {
+                "type": ["string", "null"]
+              },
+              "rateLimit": {
+                "type": "integer",
+                "minimum": 0
+              }
+            }
+          }
+        },
+        "dataSources": {
+          "type": "object",
+          "properties": {
+            "local": {
+              "type": "object",
+              "properties": {
+                "enabled": {
+                  "type": "boolean"
+                },
+                "path": {
+                  "type": "string"
+                }
+              }
+            },
+            "remote": {
+              "type": "object",
+              "properties": {
+                "enabled": {
+                  "type": "boolean"
+                },
+                "url": {
+                  "type": ["string", "null"],
+                  "format": "uri"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "testing": {
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        },
+        "testCases": {
+          "type": "string"
+        },
+        "coverage": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "boolean"
+          }
+        }
+      }
+    }
+  }
+}

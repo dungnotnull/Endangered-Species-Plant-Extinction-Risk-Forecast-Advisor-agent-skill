@@ -1,0 +1,125 @@
+{
+  "skill_name": "endangered-species-forecast-advisor",
+  "skill_version": "1.0.0",
+  "description": "Test cases for the endangered species forecast advisor skill",
+  "evals": [
+    {
+      "id": 1,
+      "name": "marine-coral-extinction-risk",
+      "prompt": "Assess the extinction risk of staghorn coral (Acropora cervicornis) in the Caribbean. The population has declined by 80% over the past 30 years. Remaining populations are scattered in isolated patches. The primary threats are bleaching from ocean warming and white band disease. Determine which IUCN Red List category this species qualifies for conceptually.",
+      "expected_output": "A structured extinction-risk assessment applying IUCN Criterion A2 (population reduction ≥80% over 30 years, meeting Endangered threshold). The assessment should include: (1) decline pattern characterization, (2) Criterion A evaluation with subcriterion A2, (3) Criterion B evaluation if AOO/EOO data is available, (4) preliminary category of EN or CR depending on thresholds met, (5) key assumptions about generation length and population data, (6) data gaps identified, (7) standard disclaimer about formal assessment requirements, and (8) referral to IUCN assessors for official status.",
+      "files": [],
+      "category": "marine",
+      "complexity": "medium"
+    },
+    {
+      "id": 2,
+      "name": "marine-coral-root-cause-diagnosis",
+      "prompt": "Diagnose the root causes of decline for staghorn coral in the Caribbean. Observed threats include increased bleaching events, white band disease outbreaks, reduced herbivorous fish populations due to overfishing, and nutrient runoff from coastal development. The decline began accelerating in the 1980s and continues today. Use the HIPPO framework and identify which threats are primary drivers.",
+      "expected_output": "A structured root-cause diagnosis using the HIPPO framework that includes: (1) decline pattern characterization (temporal: gradual then accelerating, spatial: Caribbean-wide, demographic: all life stages), (2) threat inventory for each HIPPO category plus additional categories (Climate Change, Disease, Overexploitation, Pollution), (3) causal evidence evaluation for each threat with evidence strength, (4) causal importance ranking showing Climate Change (bleaching) and Disease (white band) as primary drivers with Overexploitation and Pollution as secondary, (5) threat interactions identified (e.g., warming + disease synergy, overfishing + pollution reducing resilience), (6) proximate vs. ultimate cause analysis, (7) diagnostic confidence assessment, and (8) recommended investigations to strengthen diagnosis.",
+      "files": [],
+      "category": "marine",
+      "complexity": "high"
+    },
+    {
+      "id": 3,
+      "name": "terrestrial-mammal-extinction-risk",
+      "prompt": "Assess the extinction risk of the Amur leopard (Panthera pardus orientalis). Current population is approximately 80 mature individuals in a single subpopulation. The population has been stable over the past 10 years after conservation interventions. Geographic range is approximately 8,000 km² EOO and 1,200 km² AOO across 3 locations. Habitat loss and poaching were the primary historical causes of decline, which occurred over approximately 15 years (3 generations). Determine the IUCN Red List category conceptually.",
+      "expected_output": "A structured extinction-risk assessment that includes: (1) Criterion A evaluation (population reduction ~85% over 15 years, meets CR threshold under A2 if causes not ceased), (2) Criterion B evaluation (EOO 8,000 km², AOO 1,200 km² with 3 locations and severe fragmentation, meets CR under B2 with conditions a and b(iii, iv, v)), (3) Criterion D evaluation (population <250 mature individuals, meets EN threshold under D1, also qualifies for CR under D2 with AOO <20 km² and ≤5 locations), (4) preliminary category of CR (meets multiple criteria), (5) key assumptions about generation length and data quality, (6) note that recent stability is due to intensive conservation efforts, (7) standard disclaimer, and (8) referral for formal assessment.",
+      "files": [],
+      "category": "terrestrial",
+      "complexity": "high"
+    },
+    {
+      "id": 4,
+      "name": "terrestrial-mammal-root-cause-diagnosis",
+      "prompt": "Diagnose the root causes of decline for the Amur leopard. The species experienced severe population decline due to habitat loss from logging and fragmentation, poaching for skins and traditional medicine, and depletion of prey species (wild boar, deer). Current threats include habitat encroachment from development, occasional poaching, and low genetic diversity due to small population size. Use HIPPO and additional categories to identify primary threats and their interactions.",
+      "expected_output": "A structured root-cause diagnosis that includes: (1) decline pattern characterization (temporal: rapid historical decline then stability, spatial: range contraction to small refuge, demographic: small population with genetic concerns), (2) threat inventory covering Habitat Loss (historical primary), Overexploitation (historical and ongoing), Pollution (not applicable), Population growth (ongoing encroachment), Climate Change (not primary), Invasive Species (not applicable), plus Genetic Issues (inbreeding depression), (3) causal evidence evaluation with strong evidence for habitat loss and overexploitation, (4) causal importance ranking showing Habitat Loss and Overexploitation as historical primary drivers, Human Population Growth as ongoing threat, and Genetic Issues as emerging concern, (5) threat interactions (habitat fragmentation facilitated poaching, small population leading to inbreeding), (6) proximate vs. ultimate causes (proximate: poaching, habitat loss; ultimate: human population growth, economic development), (7) diagnostic confidence, and (8) recommended investigations.",
+      "files": [],
+      "category": "terrestrial",
+      "complexity": "high"
+    },
+    {
+      "id": 5,
+      "name": "marine-mammal-extinction-risk",
+      "prompt": "Assess the extinction risk of the vaquita (Phocoena sinus). Current population is estimated at fewer than 10 individuals. The population has declined by over 90% over the past 30 years due to bycatch in illegal gillnets. The species is restricted to a single small area in the Gulf of California. Determine the IUCN Red List category conceptually.",
+      "expected_output": "A structured extinction-risk assessment that includes: (1) Criterion A evaluation (population reduction >90% over 30 years, meets CR threshold under A2 with causes not ceased - bycatch ongoing), (2) Criterion B evaluation (EOO and AOO extremely small, single location, meets CR under B2 with conditions a and b), (3) Criterion D evaluation (population <50 mature individuals, meets CR threshold under D1, also qualifies under D2), (4) Criterion E consideration (extinction probability extremely high due to population size), (5) preliminary category of CR (possibly already functionally extinct), (6) urgent conservation needs identified, (7) standard disclaimer with emphasis on urgency, and (8) referral for immediate conservation action.",
+      "files": [],
+      "category": "marine",
+      "complexity": "medium"
+    },
+    {
+      "id": 6,
+      "name": "terrestrial-strategy-design",
+      "prompt": "Design a comprehensive conservation strategy for the Amur leopard. The diagnosis identifies primary threats as habitat loss/fragmentation, poaching of leopards and prey, and human encroachment. The current population is ~80 mature individuals. Target is to achieve a self-sustaining population of 200 mature individuals within 20 years. Available budget is $5 million over 10 years. Include protected area establishment, anti-poaching measures, prey recovery, and community engagement.",
+      "expected_output": "A structured conservation strategy proposal that includes: (1) conservation objectives (200 mature individuals by 2044), (2) strategy components addressing each primary threat: Protected Area design (core zones, buffer zones, connectivity), anti-poaching (patrols, enforcement, demand reduction), prey recovery (habitat enhancement, prey reintroduction), community engagement (benefit-sharing, alternative livelihoods), (3) implementation phasing (Phase 1: foundation and priority actions, Phase 2: expansion, Phase 3: consolidation), (4) monitoring framework (effectiveness, implementation, population metrics), (5) adaptive management with decision triggers, (6) cost estimate and budget breakdown, (7) feasibility assessment (technical, economic, social, institutional), (8) risks and uncertainties with mitigation, (9) success metrics and timeline, and (10) standard disclaimer.",
+      "files": [],
+      "category": "strategy",
+      "complexity": "high"
+    },
+    {
+      "id": 7,
+      "name": "conservation-triage-optimization",
+      "prompt": "Prioritize conservation investments among 10 Critically Endangered mammal species with a $1 million budget. Species include: Javan rhino ($500k recovery cost, 30% success probability, protects 10+ co-occurring species), vaquita ($200k, 50% success, protects few co-occurring), Amur leopard ($400k, 60% success, protects 20+ co-occurring), Sumatran orangutan ($300k, 50% success, protects 5-10 co-occurring), plus 6 others with varying costs and benefits. Use cost-effectiveness analysis and account for umbrella species benefits.",
+      "expected_output": "A conservation triage analysis that includes: (1) species characterization table with extinction risk, distinctiveness, cost, feasibility, umbrella potential, (2) cost-effectiveness calculation for each species (expected benefit ÷ cost), (3) complementarity analysis showing marginal cost-effectiveness when adding species to portfolio, (4) umbrella benefit analysis (effective benefit = direct benefit + umbrella-protected species), (5) portfolio optimization under $1M budget, (6) recommended portfolio with total expected benefit, (7) alternative portfolios for comparison, (8) sensitivity analysis (what if budget changes? what if success probabilities change?), (9) assumptions and limitations, (10) recommendations for implementation, and (11) standard disclaimer.",
+      "files": [],
+      "category": "triage",
+      "complexity": "high"
+    },
+    {
+      "id": 8,
+      "name": "plant-species-extinction-risk",
+      "prompt": "Assess the extinction risk of a hypothetical rare plant species: 'Mountain bog orchid' (hypothetical species). Current population: 3 populations totaling 500 mature individuals. Population trend: declining at 10% per generation. Generation length: 5 years. AOO: 8 km² across 3 locations. Habitat: mountainous peat bogs. Threats: habitat loss from drainage for agriculture, climate change altering precipitation patterns, invasive plant species, and collection for horticultural trade. Determine IUCN Red List category conceptually.",
+      "expected_output": "A structured extinction-risk assessment for plants that includes: (1) Criterion A evaluation (population decline, generation length considered, projected decline rate), (2) Criterion B evaluation (AOO <10 km² meets CR threshold under B2, assess whether conditions a, b, or c are met - likely severely fragmented with continuing decline in habitat quality), (3) Criterion C evaluation (population size <250 mature individuals? If not, may not qualify), (4) Criterion D evaluation (population <1,000 mature individuals? If yes, qualifies for VU), (5) preliminary category based on which criteria thresholds are met (likely CR or EN depending on exact decline rate and AOO), (6) plant-specific considerations (clonal vs. individual, seed bank, reproductive biology), (7) key assumptions, (8) data gaps, (9) standard disclaimer, and (10) referral for formal assessment.",
+      "files": [],
+      "category": "plant",
+      "complexity": "medium"
+    },
+    {
+      "id": 9,
+      "name": "pva-conceptual-analysis",
+      "prompt": "Conduct a conceptual Population Viability Analysis for a hypothetical island bird species. Current population: 200 individuals. Population trend: declining at 5% per year. Generation length: 3 years. Threats: introduced predators (rats), habitat loss, and increased hurricane frequency due to climate change. Assess extinction risk over 50 years and identify what population size is needed for long-term persistence. Discuss MVP concepts and how the different threats contribute to extinction risk.",
+      "expected_output": "A conceptual PVA that includes: (1) scope definition (species, time horizon, objective), (2) baseline population status (N=200, λ=0.95, decline trajectory), (3) MVP assessment (current N vs. demographic MVP, environmental MVP, genetic MVP; estimate effective population size Ne; assess deficit), (4) key extinction-risk drivers ranked (demographic stochasticity, environmental stochasticity from hurricanes, invasive predators, habitat loss), (5) population trajectory projection (extinction risk high within 20-30 years at current rate), (6) threat-specific contributions to extinction risk (predators = immediate risk, hurricanes = catastrophic risk, habitat loss = ongoing pressure), (7) management scenario evaluation (predator removal, habitat protection, captive breeding), (8) monitoring requirements, (9) key assumptions and data limitations, (10) recommendations for recovery, and (11) standard disclaimer about conceptual vs. quantitative PVA.",
+      "files": [],
+      "category": "pva",
+      "complexity": "high"
+    },
+    {
+      "id": 10,
+      "name": "multi-species-prioritization",
+      "prompt": "A conservation organization has $2 million to invest in species recovery in a biodiversity hotspot. 20 threatened species are present: 5 CR, 8 EN, 7 VU. Recovery costs range from $50,000 to $500,000 per species. Some species are umbrella species that would protect many others if conserved. The organization wants to maximize number of species saved while also accounting for evolutionary distinctiveness and cultural importance. Develop a prioritization strategy.",
+      "expected_output": "A comprehensive conservation triage analysis that includes: (1) species inventory with all 20 species characterized (extinction risk, distinctiveness, cost, feasibility, umbrella potential, cultural value), (2) multi-criteria decision analysis with weighted scoring (specify weights used), (3) cost-effectiveness analysis for each species, (4) complementarity analysis (which species protect others), (5) portfolio optimization under $2M budget using linear programming approach, (6) recommended portfolio showing which species to protect, total investment, total expected benefit, (7) alternative portfolios (e.g., maximizing species number vs. maximizing distinctiveness), (8) sensitivity analysis (what if budget is 50% smaller? what if some actions fail?), (9) recommendations for implementation and adaptive management, (10) assumptions and limitations, (11) standard disclaimer.",
+      "files": [],
+      "category": "triage",
+      "complexity": "high"
+    }
+  ],
+  "test_coverage": {
+    "marine": true,
+    "terrestrial": true,
+    "plants": true,
+    "multi_species": true,
+    "strategy_design": true,
+    "triage": true,
+    "pva": true,
+    "root_cause_diagnosis": true
+  },
+  "complexity_distribution": {
+    "low": 0,
+    "medium": 4,
+    "high": 6
+  },
+  "categories_tested": {
+    "extinction_risk_assessment": 4,
+    "root_cause_diagnosis": 2,
+    "strategy_design": 1,
+    "conservation_triage": 2,
+    "pva_analysis": 1
+  },
+  "metadata": {
+    "created": "2026-08-04",
+    "skill_version": "1.0.0",
+    "test_framework": "skill-creator",
+    "validation_status": "production_ready"
+  }
+}

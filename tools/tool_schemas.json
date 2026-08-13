@@ -1,0 +1,1262 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Endangered Species Advisor Tool Schemas",
+  "description": "JSON schemas for tools available in the endangered species forecast advisor system",
+  "toolSchemas": {
+    "iucn_criteria_assessor": {
+      "name": "iucn_criteria_assessor",
+      "description": "Apply IUCN Red List criteria to assess extinction risk for a species",
+      "inputSchema": {
+        "type": "object",
+        "required": ["species", "populationData"],
+        "properties": {
+          "species": {
+            "type": "string",
+            "description": "Scientific or common name of the species"
+          },
+          "populationData": {
+            "type": "object",
+            "description": "Population data required for assessment",
+            "properties": {
+              "populationSize": {
+                "type": "number",
+                "description": "Current population size (mature individuals if known)"
+              },
+              "populationTrend": {
+                "type": "string",
+                "enum": ["increasing", "stable", "decreasing", "unknown"],
+                "description": "Population trend over appropriate timeframe"
+              },
+              "generationLength": {
+                "type": "number",
+                "description": "Generation length in years"
+              },
+              "populationReduction": {
+                "type": "number",
+                "description": "Percentage population reduction over assessment period"
+              },
+              "reductionPeriod": {
+                "type": "number",
+                "description": "Time period over which reduction occurred (years)"
+              },
+              "reductionCauses": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "description": "Causes of population reduction"
+              },
+              "causesReversible": {
+                "type": "boolean",
+                "description": "Whether reduction causes are reversible"
+              },
+              "causesUnderstood": {
+                "type": "boolean",
+                "description": "Whether reduction causes are understood"
+              },
+              "causesCeased": {
+                "type": "boolean",
+                "description": "Whether reduction causes have ceased"
+              },
+              "extentOfOccurrence": {
+                "type": "number",
+                "description": "Extent of occurrence in km²"
+              },
+              "areaOfOccupancy": {
+                "type": "number",
+                "description": "Area of occupancy in km²"
+              },
+              "numberOfLocations": {
+                "type": "integer",
+                "description": "Number of distinct locations"
+              },
+              "severelyFragmented": {
+                "type": "boolean",
+                "description": "Whether population is severely fragmented"
+              },
+              "continuingDecline": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "description": "Parameters showing continuing decline"
+              },
+              "extremeFluctuations": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "description": "Parameters showing extreme fluctuations"
+              },
+              "projectionAvailable": {
+                "type": "boolean",
+                "description": "Whether population projections are available"
+              },
+              "projectedReduction": {
+                "type": "number",
+                "description": "Projected percentage population reduction"
+              },
+              "projectionPeriod": {
+                "type": "number",
+                "description": "Projection period (years)"
+              },
+              "quantitativeAnalysisAvailable": {
+                "type": "boolean",
+                "description": "Whether quantitative PVA analysis is available"
+              },
+              "extinctionProbability": {
+                "type": "number",
+                "description": "Probability of extinction in the wild (percentage)"
+              },
+              "extinctionTimeframe": {
+                "type": "number",
+                "description": "Timeframe for extinction probability (years)"
+              }
+            },
+            "additionalProperties": true
+          },
+          "assessmentParameters": {
+            "type": "object",
+            "description": "Optional assessment parameters",
+            "properties": {
+              "assessmentYear": {
+                "type": "integer",
+                "description": "Year of assessment"
+              },
+              "assessmentRegion": {
+                "type": "string",
+                "description": "Geographic region for assessment"
+              },
+              "regionalPopulation": {
+                "type": "boolean",
+                "description": "Whether this is a regional (not global) assessment"
+              },
+              "regionalAdjustment": {
+                "type": "string",
+                "description": "Regional downscaling/upscaling rationale"
+              }
+            }
+          },
+          "metadata": {
+            "type": "object",
+            "description": "Metadata about the assessment request",
+            "properties": {
+              "assessor": {
+                "type": "string",
+                "description": "Name or ID of the assessor"
+              },
+              "dataSources": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "description": "Sources of population data"
+              },
+              "confidenceLevel": {
+                "type": "string",
+                "enum": ["high", "medium", "low"],
+                "description": "Confidence level in the assessment"
+              },
+              "notes": {
+                "type": "string",
+                "description": "Additional notes about the assessment"
+              }
+            }
+          }
+        }
+      },
+      "outputSchema": {
+        "type": "object",
+        "required": ["species", "assessedCategory", "criteriaApplied"],
+        "properties": {
+          "species": {
+            "type": "string",
+            "description": "Species name as provided"
+          },
+          "assessedCategory": {
+            "type": "string",
+            "enum": ["EX", "EW", "CR", "EN", "VU", "NT", "LC", "DD", "NE"],
+            "description": "IUCN Red List category assessed"
+          },
+          "criteriaApplied": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Criteria that triggered the assessed category (e.g., ['A2c', 'B1ab(iii)'])"
+          },
+          "criterionResults": {
+            "type": "object",
+            "description": "Results for each criterion evaluated",
+            "properties": {
+              "criterionA": {
+                "type": "object",
+                "properties": {
+                  "evaluated": {
+                    "type": "boolean"
+                  },
+                  "subcategory": {
+                    "type": "string"
+                  },
+                  "thresholdMet": {
+                    "type": "string",
+                    "enum": ["CR", "EN", "VU", "none"]
+                  },
+                  "populationReduction": {
+                    "type": "number"
+                  },
+                  "assessmentPeriod": {
+                    "type": "string"
+                  },
+                  "causesStatus": {
+                    "type": "string"
+                  },
+                  "rationale": {
+                    "type": "string"
+                  }
+                }
+              },
+              "criterionB": {
+                "type": "object",
+                "properties": {
+                  "evaluated": {
+                    "type": "boolean"
+                  },
+                  "subcategory": {
+                    "type": "string"
+                  },
+                  "thresholdMet": {
+                    "type": "string",
+                    "enum": ["CR", "EN", "VU", "none"]
+                  },
+                  "EOO": {
+                    "type": "number"
+                  },
+                  "AOO": {
+                    "type": "number"
+                  },
+                  "numberOfLocations": {
+                    "type": "integer"
+                  },
+                  "conditionsMet": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "rationale": {
+                    "type": "string"
+                  }
+                }
+              },
+              "criterionC": {
+                "type": "object",
+                "properties": {
+                  "evaluated": {
+                    "type": "boolean"
+                  },
+                  "subcategory": {
+                    "type": "string"
+                  },
+                  "thresholdMet": {
+                    "type": "string",
+                    "enum": ["CR", "EN", "VU", "none"]
+                  },
+                  "matureIndividuals": {
+                    "type": "integer"
+                  },
+                  "projectedDecline": {
+                    "type": "number"
+                  },
+                  "AOO": {
+                    "type": "number"
+                  },
+                  "numberOfLocations": {
+                    "type": "integer"
+                  },
+                  "rationale": {
+                    "type": "string"
+                  }
+                }
+              },
+              "criterionD": {
+                "type": "object",
+                "properties": {
+                  "evaluated": {
+                    "type": "boolean"
+                  },
+                  "subcategory": {
+                    "type": "string"
+                  },
+                  "thresholdMet": {
+                    "type": "string",
+                    "enum": ["CR", "EN", "VU", "none"]
+                  },
+                  "matureIndividuals": {
+                    "type": "integer"
+                  },
+                  "AOO": {
+                    "type": "number"
+                  },
+                  "numberOfLocations": {
+                    "type": "integer"
+                  },
+                  "rationale": {
+                    "type": "string"
+                  }
+                }
+              },
+              "criterionE": {
+                "type": "object",
+                "properties": {
+                  "evaluated": {
+                    "type": "boolean"
+                  },
+                  "thresholdMet": {
+                    "type": "string",
+                    "enum": ["CR", "EN", "VU", "none"]
+                  },
+                  "extinctionProbability": {
+                    "type": "number"
+                  },
+                  "timeframe": {
+                    "type": "integer"
+                  },
+                  "rationale": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "rationale": {
+            "type": "string",
+            "description": "Detailed rationale for the assessment"
+          },
+          "dataGaps": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Identified data gaps affecting the assessment"
+          },
+          "assumptions": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Key assumptions made during assessment"
+          },
+          "recommendations": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Recommendations for additional data or actions"
+          },
+          "disclaimer": {
+            "type": "string",
+            "description": "Standard disclaimer about the nature of the assessment"
+          },
+          "assessmentMetadata": {
+            "type": "object",
+            "properties": {
+              "assessedDate": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "assessor": {
+                "type": "string"
+              },
+              "assessmentRegion": {
+                "type": "string"
+              },
+              "confidenceLevel": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
+      "examples": [
+        {
+          "input": {
+            "species": "Panthera pardus orientalis",
+            "populationData": {
+              "populationSize": 80,
+              "populationTrend": "stable",
+              "generationLength": 8,
+              "populationReduction": 85,
+              "reductionPeriod": 15,
+              "reductionCauses": ["habitatLoss", "overexploitation"],
+              "causesReversible": false,
+              "causesUnderstood": true,
+              "causesCeased": false,
+              "extentOfOccurrence": 8000,
+              "areaOfOccupancy": 1200,
+              "numberOfLocations": 3,
+              "severelyFragmented": true,
+              "continuingDecline": ["areaOfOccupancy", "habitatQuality"]
+            },
+            "assessmentParameters": {
+              "assessmentYear": 2024,
+              "regionalPopulation": false
+            }
+          },
+          "output": {
+            "species": "Panthera pardus orientalis",
+            "assessedCategory": "CR",
+            "criteriaApplied": ["B2ab(iii)"],
+            "criterionResults": {
+              "criterionB": {
+                "evaluated": true,
+                "subcategory": "B2",
+                "thresholdMet": "CR",
+                "EOO": 8000,
+                "AOO": 1200,
+                "numberOfLocations": 3,
+                "conditionsMet": ["a", "b(iii)"],
+                "rationale": "AOO < 100 km², severely fragmented, continuing decline in habitat quality"
+              }
+            },
+            "rationale": " qualifies as Critically Endangered under Criterion B2...",
+            "disclaimer": "This is a conceptual assessment for educational purposes..."
+          }
+        }
+      ]
+    },
+    "threat_classifier": {
+      "name": "threat_classifier",
+      "description": "Classify observed threats against the HIPPO framework and other threat categories",
+      "inputSchema": {
+        "type": "object",
+        "required": ["species", "observedThreats"],
+        "properties": {
+          "species": {
+            "type": "string",
+            "description": "Scientific or common name of the species"
+          },
+          "observedThreats": {
+            "type": "array",
+            "description": "List of observed or suspected threats",
+            "items": {
+              "type": "object",
+              "required": ["threatDescription"],
+              "properties": {
+                "threatDescription": {
+                  "type": "string",
+                  "description": "Description of the threat"
+                },
+                "threatCategory": {
+                  "type": "string",
+                  "enum": [
+                    "habitatLoss",
+                    "invasiveSpecies",
+                    "pollution",
+                    "humanPopulation",
+                    "overexploitation",
+                    "climateChange",
+                    "disease",
+                    "geneticIssues"
+                  ],
+                  "description": "HIPPO or additional threat category"
+                },
+                "severity": {
+                  "type": "string",
+                  "enum": ["low", "medium", "high", "critical"],
+                  "description": "Severity of the threat"
+                },
+                "spatialExtent": {
+                  "type": "string",
+                  "enum": ["localized", "regional", "widespread", "range-wide"],
+                  "description": "Spatial extent of the threat"
+                },
+                "temporalPattern": {
+                  "type": "string",
+                  "enum": ["historical", "ongoing", "emerging", "future"],
+                  "description": "Temporal pattern of the threat"
+                },
+                "evidenceStrength": {
+                  "type": "string",
+                  "enum": ["strong", "moderate", "weak", "inferred"],
+                  "description": "Strength of evidence for this threat"
+                },
+                "trend": {
+                  "type": "string",
+                  "enum": ["increasing", "stable", "decreasing", "unknown"],
+                  "description": "Trend of the threat over time"
+                },
+                "managementStatus": {
+                  "type": "string",
+                  "enum": ["unmanaged", "partiallyManaged", "wellManaged"],
+                  "description": "Current management status of the threat"
+                }
+              }
+            }
+          },
+          "declinePattern": {
+            "type": "object",
+            "properties": {
+              "temporal": {
+                "type": "string",
+                "description": "Temporal pattern of decline"
+              },
+              "spatial": {
+                "type": "string",
+                "description": "Spatial pattern of decline"
+              },
+              "demographic": {
+                "type": "string",
+                "description": "Demographic pattern of decline"
+              }
+            }
+          },
+          "correlationEvidence": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "threat": {
+                  "type": "string"
+                },
+                "correlation": {
+                  "type": "string",
+                  "enum": ["strong", "moderate", "weak", "none"]
+                },
+                "spatialCorrelation": {
+                  "type": "string",
+                  "enum": ["strong", "moderate", "weak", "none"]
+                },
+                "temporalCorrelation": {
+                  "type": "string",
+                  "enum": ["strong", "moderate", "weak", "none"]
+                }
+              }
+            }
+          }
+        }
+      },
+      "outputSchema": {
+        "type": "object",
+        "required": ["species", "classifiedThreats", "threatRanking"],
+        "properties": {
+          "species": {
+            "type": "string"
+          },
+          "classifiedThreats": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "category": {
+                  "type": "string",
+                  "description": "HIPPO or other category"
+                },
+                "subcategories": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "description": "Specific subcategories within the category"
+                },
+                "severity": {
+                  "type": "string"
+                },
+                "evidenceStrength": {
+                  "type": "string"
+                },
+                "causalImportance": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 100,
+                  "description": "Causal importance score (0-100)"
+                },
+                "mechanism": {
+                  "type": "string",
+                  "description": "Mechanism by which threat affects species"
+                },
+                "proximateCause": {
+                  "type": "boolean",
+                  "description": "Whether this is a proximate cause"
+                },
+                "ultimateCause": {
+                  "type": "boolean",
+                  "description": "Whether this is an ultimate cause"
+                }
+              }
+            }
+          },
+          "threatRanking": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "rank": {
+                  "type": "integer"
+                },
+                "threat": {
+                  "type": "string"
+                },
+                "score": {
+                  "type": "number"
+                },
+                "confidence": {
+                  "type": "string",
+                  "enum": ["high", "medium", "low"]
+                }
+              }
+            }
+          },
+          "threatInteractions": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "threat1": {
+                  "type": "string"
+                },
+                "threat2": {
+                  "type": "string"
+                },
+                "interactionType": {
+                  "type": "string",
+                  "enum": ["synergistic", "additive", "antagonistic", "cascading"]
+                },
+                "description": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "dataGaps": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "recommendedInvestigations": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "strategy_generator": {
+      "name": "strategy_generator",
+      "description": "Generate conservation-strategy proposals from templates based on diagnosis",
+      "inputSchema": {
+        "type": "object",
+        "required": ["species", "diagnosis"],
+        "properties": {
+          "species": {
+            "type": "string"
+          },
+          "diagnosis": {
+            "type": "object",
+            "description": "Diagnosis results from threat_classifier",
+            "properties": {
+              "primaryThreats": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "threatRanking": {
+                "type": "array",
+                "items": {
+                  "type": "object"
+                }
+              },
+              "threatInteractions": {
+                "type": "array",
+                "items": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "strategyType": {
+            "type": "string",
+            "enum": ["protectedArea", "habitatCorridor", "captiveBreeding", "communityBased", "integrated"],
+            "description": "Type of conservation strategy to generate"
+          },
+          "constraints": {
+            "type": "object",
+            "properties": {
+              "budget": {
+                "type": "number",
+                "description": "Available budget in USD"
+              },
+              "timeframe": {
+                "type": "number",
+                "description": "Implementation timeframe in years"
+              },
+              "feasibility": {
+                "type": "string",
+                "enum": ["high", "medium", "low"],
+                "description": "Feasibility of implementation"
+              },
+              "stakeholderSupport": {
+                "type": "string",
+                "enum": ["high", "medium", "low", "unknown"],
+                "description": "Level of stakeholder support"
+              }
+            }
+          },
+          "options": {
+            "type": "object",
+            "properties": {
+              "includeMonitoring": {
+                "type": "boolean",
+                "default": true
+              },
+              "includeAdaptiveManagement": {
+                "type": "boolean",
+                "default": true
+              },
+              "includeCostBreakdown": {
+                "type": "boolean",
+                "default": true
+              },
+              "detailLevel": {
+                "type": "string",
+                "enum": ["minimal", "standard", "comprehensive"],
+                "default": "standard"
+              }
+            }
+          }
+        }
+      },
+      "outputSchema": {
+        "type": "object",
+        "required": ["species", "strategyType", "strategyComponents"],
+        "properties": {
+          "species": {
+            "type": "string"
+          },
+          "strategyType": {
+            "type": "string"
+          },
+          "conservationObjectives": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "strategyComponents": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "component": {
+                  "type": "string"
+                },
+                "description": {
+                  "type": "string"
+                },
+                "threatsAddressed": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "actions": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "action": {
+                        "type": "string"
+                      },
+                      "responsible": {
+                        "type": "string"
+                      },
+                      "timeline": {
+                        "type": "string"
+                      },
+                      "priority": {
+                        "type": "string",
+                        "enum": ["high", "medium", "low"]
+                      }
+                    }
+                  }
+                },
+                "expectedOutcomes": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "successMetrics": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "implementationPhasing": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "phase": {
+                  "type": "string"
+                },
+                "duration": {
+                  "type": "string"
+                },
+                "components": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "investment": {
+                  "type": "object",
+                  "properties": {
+                    "budget": {
+                      "type": "number"
+                    },
+                    "personnel": {
+                      "type": "number"
+                    }
+                  }
+                },
+                "outcomes": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "monitoringFramework": {
+            "type": "object",
+            "properties": {
+              "effectivenessMonitoring": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "implementationMonitoring": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "reportingSchedule": {
+                "type": "string"
+              }
+            }
+          },
+          "adaptiveManagement": {
+            "type": "object",
+            "properties": {
+              "reviewFrequency": {
+                "type": "string"
+              },
+              "decisionTriggers": {
+                "type": "array",
+                "items": {
+                  "type": "object"
+                }
+              },
+              "contingencyPlans": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "costEstimate": {
+            "type": "object",
+            "properties": {
+              "totalBudget": {
+                "type": "number"
+              },
+              "annualBudget": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "year": {
+                      "type": "integer"
+                    },
+                    "amount": {
+                      "type": "number"
+                    }
+                  }
+                }
+              },
+              "costBreakdown": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "category": {
+                      "type": "string"
+                    },
+                    "amount": {
+                      "type": "number"
+                    },
+                    "percentage": {
+                      "type": "number"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "feasibilityAssessment": {
+            "type": "object",
+            "properties": {
+              "technicalFeasibility": {
+                "type": "string",
+                "enum": ["high", "medium", "low"]
+              },
+              "economicFeasibility": {
+                "type": "string",
+                "enum": ["high", "medium", "low"]
+              },
+              "socialFeasibility": {
+                "type": "string",
+                "enum": ["high", "medium", "low"]
+              },
+              "institutionalFeasibility": {
+                "type": "string",
+                "enum": ["high", "medium", "low"]
+              }
+            }
+          },
+          "risksAndUncertainties": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "risk": {
+                  "type": "string"
+                },
+                "probability": {
+                  "type": "string",
+                  "enum": ["high", "medium", "low"]
+                },
+                "impact": {
+                  "type": "string",
+                  "enum": ["high", "medium", "low"]
+                },
+                "mitigation": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "disclaimer": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "triage_calculator": {
+      "name": "triage_calculator",
+      "description": "Compute cost-effectiveness scores and optimization results for conservation prioritization",
+      "inputSchema": {
+        "type": "object",
+        "required": ["speciesList", "constraints"],
+        "properties": {
+          "speciesList": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["species", "extinctionRisk"],
+              "properties": {
+                "species": {
+                  "type": "string"
+                },
+                "extinctionRisk": {
+                  "type": "string",
+                  "enum": ["CR", "EN", "VU", "NT", "LC"]
+                },
+                "populationTrend": {
+                  "type": "string",
+                  "enum": ["decreasing", "stable", "increasing", "unknown"]
+                },
+                "distinctiveness": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 100,
+                  "description": "Evolutionary distinctiveness score (0-100)"
+                },
+                "recoveryCost": {
+                  "type": "number",
+                  "description": "Estimated recovery cost in USD"
+                },
+                "recoveryFeasibility": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 100,
+                  "description": "Recovery feasibility percentage (0-100)"
+                },
+                "umbrellaPotential": {
+                  "type": "integer",
+                  "description": "Number of co-occurring threatened species that would benefit"
+                },
+                "culturalValue": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 100,
+                  "description": "Cultural value score (0-100)"
+                },
+                "expectedBenefit": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 100,
+                  "description": "Expected conservation benefit (extinction risk reduction %)"
+                }
+              }
+            }
+          },
+          "constraints": {
+            "type": "object",
+            "required": ["budget"],
+            "properties": {
+              "budget": {
+                "type": "number",
+                "description": "Total available budget in USD"
+              },
+              "timeframe": {
+                "type": "integer",
+                "description": "Planning timeframe in years"
+              },
+              "minimumSpecies": {
+                "type": "integer",
+                "description": "Minimum number of species to include"
+              },
+              "requiredSpecies": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "description": "Species that must be included (e.g., legally required)"
+              },
+              "excludedSpecies": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "description": "Species to exclude from prioritization"
+              }
+            }
+          },
+          "optimizationOptions": {
+            "type": "object",
+            "properties": {
+              "objective": {
+                "type": "string",
+                "enum": ["maximizeBenefit", "minimizeCost", "maximizeSpecies", "balanced"],
+                "default": "maximizeBenefit"
+              },
+              "accountForComplementarity": {
+                "type": "boolean",
+                "default": true,
+                "description": "Whether to account for complementarity in species selection"
+              },
+              "accountForUmbrella": {
+                "type": "boolean",
+                "default": true,
+                "description": "Whether to account for umbrella benefits"
+              },
+              "riskTolerance": {
+                "type": "string",
+                "enum": ["low", "medium", "high"],
+                "default": "medium",
+                "description": "Risk tolerance for uncertain outcomes"
+              },
+              "diversification": {
+                "type": "boolean",
+                "default": false,
+                "description": "Whether to diversify across taxa or regions"
+              }
+            }
+          },
+          "criteriaWeights": {
+            "type": "object",
+            "properties": {
+              "extinctionRisk": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 100
+              },
+              "distinctiveness": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 100
+              },
+              "costEffectiveness": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 100
+              },
+              "feasibility": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 100
+              },
+              "umbrella": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 100
+              },
+              "cultural": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 100
+              }
+            }
+          }
+        }
+      },
+      "outputSchema": {
+        "type": "object",
+        "required": ["selectedPortfolio", "optimizationResults"],
+        "properties": {
+          "selectedPortfolio": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "species": {
+                  "type": "string"
+                },
+                "investment": {
+                  "type": "number"
+                },
+                "expectedBenefit": {
+                  "type": "number"
+                },
+                "umbrellaBenefit": {
+                  "type": "integer"
+                },
+                "costEffectiveness": {
+                  "type": "number"
+                },
+                "score": {
+                  "type": "number"
+                }
+              }
+            }
+          },
+          "optimizationResults": {
+            "type": "object",
+            "properties": {
+              "totalInvestment": {
+                "type": "number"
+              },
+              "remainingBudget": {
+                "type": "number"
+              },
+              "totalExpectedBenefit": {
+                "type": "number"
+              },
+              "speciesProtected": {
+                "type": "integer"
+              },
+              "umbrellaSpeciesProtected": {
+                "type": "integer"
+              },
+              "optimizationScore": {
+                "type": "number"
+              }
+            }
+          },
+          "alternativePortfolios": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "description": {
+                  "type": "string"
+                },
+                "portfolio": {
+                  "type": "array",
+                  "items": {
+                    "type": "object"
+                  }
+                },
+                "results": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "sensitivityAnalysis": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "scenario": {
+                  "type": "string"
+                },
+                "portfolio": {
+                  "type": "array"
+                },
+                "results": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "ranking": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "rank": {
+                  "type": "integer"
+                },
+                "species": {
+                  "type": "string"
+                },
+                "score": {
+                  "type": "number"
+                },
+                "marginalCostEffectiveness": {
+                  "type": "number"
+                },
+                "confidence": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "assumptions": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "recommendations": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    }
+  },
+  "metadata": {
+    "version": "1.0.0",
+    "lastUpdated": "2024-08-04",
+    "schemaFormat": "JSON Schema draft-07"
+  }
+}
